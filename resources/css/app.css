@@ -1,14 +1,2 @@
 @import "tailwindcss";
 
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
-
-.body {
-    font-family: 'Inter', sans-serif;
-    scroll-behavior: smooth;
-}
-
-.font-serif {
-    font-family: 'Playfair Display', serif;
-}
-

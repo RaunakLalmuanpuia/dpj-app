@@ -4,18 +4,18 @@
         <nav class="sticky top-0 z-50 bg-[#FDFCFB]/80 backdrop-blur-md border-b border-slate-100">
             <div class="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
                 <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950">DPJ<span class="text-orange-500">.</span></div>
-                <div class="items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                    <a href="#process" class="hover:text-orange-500 transition">The Flow</a>
-                    <a href="#pricing" class="hover:text-orange-500 transition">Artisan Plans</a>
-                    <a href="#testimonials" class="hover:text-orange-500 transition">Reviews</a>
+                <div class="items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 hidden md:flex">
+                    <a href="#collections" class="hover:text-orange-500 transition">Collections</a>
+                    <a href="#about" class="hover:text-orange-500 transition">Philosophy</a>
+                    <a href="#testimonials" class="hover:text-orange-500 transition">Community</a>
                 </div>
                 <button class="bg-indigo-950 text-white px-7 py-2.5 rounded-full text-sm font-bold hover:bg-orange-600 transition shadow-lg shadow-indigo-100">
-                    Member Login
+                    Free Access
                 </button>
             </div>
         </nav>
 
-        <header class="relative px-6 pt-16 md:pt-28 pb-20 text-center max-w-5xl mx-auto">
+        <header class="relative px-6 pt-16 md:pt-28 pb-20 flex flex-col items-center text-center max-w-5xl mx-auto">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[500px] bg-gradient-to-b from-orange-50/50 to-transparent rounded-full blur-3xl -z-10"></div>
 
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-100 text-orange-700 text-xs font-bold mb-8 animate-fade-in">
@@ -23,58 +23,41 @@
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
                 </span>
-                ARTISAN SHEETS NOW SYNCING WITH GOOGLE DRIVE
+                OPEN SOURCE & FREE FOREVER
             </div>
 
             <h1 class="text-5xl md:text-8xl font-serif font-medium leading-[1.05] mb-8 text-indigo-950 tracking-tight">
-                Curated journals, <br/>
-                <span class="italic font-light text-slate-400">customized for you.</span>
+                Premium journals, <br/>
+                <span class="italic font-light text-slate-400">designed for clarity.</span>
             </h1>
 
-            <p class="text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">
-                Experience the world's most sophisticated journaling system. DPJ delivers <strong>bespoke, ready-to-write sheets</strong> designed by productivity experts directly to your Google Drive.
+            <p class="text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed text-center">
+                Experience the world's most sophisticated journaling layouts. Pick a collection below and sync <strong>artisan, ready-to-write sheets</strong> directly to your Google Drive.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="#pricing" class="w-full sm:w-auto px-10 py-5 bg-indigo-950 text-white rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-2xl">
-                    Claim Your Custom Sheets
+                <a href="#collections" class="w-full sm:w-auto px-10 py-5 bg-indigo-950 text-white rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-2xl">
+                    Choose Your Collection
                 </a>
-                <div class="flex -space-x-3 overflow-hidden">
-                    <img class="inline-block h-10 w-10 rounded-full ring-2 ring-[#FDFCFB]" src="https://i.pravatar.cc/100?u=1" alt="">
-                    <img class="inline-block h-10 w-10 rounded-full ring-2 ring-[#FDFCFB]" src="https://i.pravatar.cc/100?u=2" alt="">
-                    <img class="inline-block h-10 w-10 rounded-full ring-2 ring-[#FDFCFB]" src="https://i.pravatar.cc/100?u=3" alt="">
-                    <div class="flex items-center justify-center h-10 w-10 rounded-full bg-orange-100 text-[10px] font-bold text-orange-600 ring-2 ring-[#FDFCFB]">1k+</div>
-                </div>
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto px-6 py-10 border-y border-slate-100 flex flex-wrap justify-center gap-8 md:gap-20 opacity-50 grayscale">
-            <span class="font-serif font-bold text-xl tracking-tight text-indigo-950">Tailored Design</span>
-            <span class="font-serif font-bold text-xl tracking-tight text-indigo-950">Automated Delivery</span>
-            <span class="font-serif font-bold text-xl tracking-tight text-indigo-950">Secure Sync</span>
-        </div>
-
-        <section id="pricing" class="max-w-7xl mx-auto px-6 py-24">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-serif text-indigo-950 mb-4">Select your level of clarity</h2>
-                <p class="text-slate-500 italic max-w-xl mx-auto">Every plan includes our signature artisan layouts. Focus and Legacy plans feature <strong>full customization</strong> based on your goals.</p>
+        <section id="collections" class="max-w-7xl mx-auto px-6 py-24">
+            <div class="flex flex-col items-center text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-serif text-indigo-950 mb-4 text-center">Professional systems for everyone.</h2>
+                <p class="text-slate-500 italic max-w-xl mx-auto text-center leading-relaxed">
+                    Select the workflow that matches your goals. Every collection is fully automated and free.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div v-for="(plan, index) in plans" :key="index"
-                     class="relative group p-8 rounded-[2.5rem] bg-white border border-slate-100 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 overflow-hidden"
-                     :class="{'ring-2 ring-orange-500 shadow-xl': plan.popular}">
-
-                    <div v-if="plan.popular" class="absolute top-0 left-0 right-0 bg-orange-500 py-1.5 text-center text-[10px] text-white font-black uppercase tracking-widest">
-                        Best Seller
-                    </div>
+                     class="relative group p-8 rounded-[2.5rem] bg-white border border-slate-100 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 overflow-hidden">
 
                     <div class="mb-8">
-                        <h3 class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-4">{{ plan.title }}</h3>
-                        <div class="flex items-baseline gap-1">
-                            <span class="text-4xl font-serif font-bold text-indigo-950">${{ plan.price }}</span>
-                            <span class="text-slate-400 text-sm italic">/{{ plan.period }}</span>
-                        </div>
+                        <div class="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-2">Collection 0{{index + 1}}</div>
+                        <h3 class="text-2xl font-serif font-bold text-indigo-950 mb-4">{{ plan.title }}</h3>
+                        <div class="text-emerald-500 text-xs font-bold">✓ Lifetime Access</div>
                     </div>
 
                     <ul class="space-y-4 mb-10 min-h-[160px]">
@@ -84,41 +67,40 @@
                         </li>
                     </ul>
 
-                    <button class="w-full py-4 rounded-2xl font-bold text-sm transition-all duration-300"
-                            :class="plan.popular ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-lg shadow-orange-100' : 'bg-slate-50 text-indigo-950 hover:bg-indigo-950 hover:text-white'">
-                        Connect Gmail & Start
+                    <button class="w-full py-4 rounded-2xl font-bold text-sm bg-slate-50 text-indigo-950 group-hover:bg-indigo-950 group-hover:text-white transition-all duration-300">
+                        Sync to Drive
                     </button>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 bg-white">
-            <div class="max-w-4xl mx-auto px-6 text-center">
-                <span class="text-orange-500 font-bold tracking-widest text-xs uppercase">The DPJ Standard</span>
-                <h2 class="text-4xl font-serif text-indigo-950 mt-4 mb-8 italic">"Not just a template, but a transformation."</h2>
-                <p class="text-slate-600 leading-relaxed text-lg">
-                    Every DPJ sheet is crafted with white-space theory and psychological prompts to help you dig deeper. For our premium users, we adjust the grid, the prompts, and the goals to align perfectly with your personal or professional journey.
-                </p>
-            </div>
-        </section>
-
-        <section id="testimonials" class="bg-indigo-950 py-24 text-white overflow-hidden">
-            <div class="max-w-7xl mx-auto px-6">
-                <h2 class="text-center text-3xl md:text-5xl font-serif mb-16">Stories from the mindful.</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div v-for="t in testimonials" :key="t.name" class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                        <div class="flex gap-1 text-orange-400 mb-4 text-xs">
-                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        <section id="about" class="py-24 bg-indigo-950 text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 skew-x-12 translate-x-32"></div>
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-orange-500 font-bold tracking-widest text-xs uppercase block mb-4">Our Philosophy</span>
+                        <h2 class="text-4xl md:text-6xl font-serif leading-tight mb-8">Journaling is the <span class="italic text-slate-400">interface</span> for your mind.</h2>
+                        <div class="space-y-6 text-indigo-100/80 text-lg leading-relaxed">
+                            <p>We believe that productivity isn't about doing more, but about thinking more clearly. Our layouts use <strong>white-space theory</strong> and cognitive prompts to bypass the "blank page" anxiety.</p>
+                            <p>By automating the delivery to Google Drive, we remove the friction of setup. You focus on the writing; we focus on the structure.</p>
                         </div>
-                        <p class="text-indigo-100 italic mb-8 leading-relaxed">"{{ t.quote }}"</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-orange-200 overflow-hidden">
-                                <img :src="`https://i.pravatar.cc/100?u=${t.name}`" alt="">
+                        <div class="mt-10 flex gap-8">
+                            <div>
+                                <div class="text-3xl font-serif text-orange-500 mb-1">100%</div>
+                                <div class="text-[10px] uppercase tracking-widest font-bold">Privacy Owned</div>
                             </div>
                             <div>
-                                <div class="text-sm font-bold">{{ t.name }}</div>
-                                <div class="text-[10px] text-indigo-400 uppercase tracking-widest">{{ t.role }}</div>
+                                <div class="text-3xl font-serif text-orange-500 mb-1">Zero</div>
+                                <div class="text-[10px] uppercase tracking-widest font-bold">Subscription Fees</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="aspect-square rounded-3xl bg-gradient-to-br from-indigo-800 to-indigo-900 border border-white/10 p-8 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">✍️</div>
+                                <div class="text-sm font-serif italic text-slate-300">"The palest ink is better than the best memory."</div>
                             </div>
                         </div>
                     </div>
@@ -126,74 +108,88 @@
             </div>
         </section>
 
-        <section class="max-w-5xl mx-auto px-6 py-32 text-center">
-            <div class="text-6xl mb-8">✨</div>
-            <h2 class="text-4xl font-serif text-indigo-950 mb-6">Experience customized journaling.</h2>
-            <p class="text-slate-500 mb-10">Sign in with Gmail to sync your artisanal sheets today.</p>
-            <button class="px-12 py-5 bg-orange-500 text-white rounded-full font-black hover:scale-105 transition shadow-2xl shadow-orange-200 uppercase tracking-widest text-sm">
-                Connect Gmail & Pay
-            </button>
-        </section>
+        <section id="testimonials" class="max-w-7xl mx-auto px-6 py-24">
+            <div class="flex flex-col items-center text-center mb-16">
+                <span class="text-orange-500 font-bold tracking-widest text-xs uppercase block mb-4">Community Voices</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-indigo-950 mb-4">Trusted by 5,000+ writers.</h2>
+            </div>
 
-        <footer class="bg-white py-24 px-6 border-t border-slate-100">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16">
-
-                    <div class="md:col-span-5 lg:col-span-6 space-y-6">
-                        <div class="text-3xl font-serif font-black text-indigo-950 tracking-tighter">
-                            DPJ<span class="text-orange-500">.</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div v-for="t in testimonials" :key="t.name" class="p-10 rounded-[2rem] bg-white border border-slate-100 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex gap-1 text-orange-400 mb-6">
+                        <span v-for="i in 5" :key="i">★</span>
+                    </div>
+                    <p class="text-slate-600 italic text-lg leading-relaxed mb-8">"{{ t.quote }}"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-slate-100 overflow-hidden">
+                            <img :src="`https://i.pravatar.cc/100?u=${t.name}`" :alt="t.name">
                         </div>
-                        <p class="text-slate-500 max-w-sm text-base leading-relaxed">
-                            The intersection of artisan design and digital automation. We craft bespoke journaling experiences delivered directly to your Google Drive.
-                        </p>
-                        <div class="flex items-center gap-2 pt-2">
-                            <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">All Systems Operational</span>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-3 lg:col-span-2">
-                        <h4 class="font-bold text-[11px] uppercase tracking-[0.2em] text-indigo-950 mb-8">Product</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Artisan Gallery</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Customization</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Drive Security</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Pricing Plans</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="md:col-span-2 lg:col-span-2">
-                        <h4 class="font-bold text-[11px] uppercase tracking-[0.2em] text-indigo-950 mb-8">Support</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Gmail Setup</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Help Center</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Privacy Policy</a></li>
-                            <li><a href="#" class="text-slate-500 hover:text-orange-600 transition-colors text-sm">Terms of Service</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="md:col-span-2 lg:col-span-2">
-                        <h4 class="font-bold text-[11px] uppercase tracking-[0.2em] text-indigo-950 mb-8">Connect</h4>
-                        <div class="flex flex-col space-y-4">
-                            <a href="mailto:hello@dpj.com" class="text-slate-500 hover:text-orange-600 transition-colors text-sm break-all">hello@dpj.com</a>
-                            <div class="flex gap-4 pt-2">
-                                <a href="#" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center hover:bg-orange-50 hover:text-orange-600 transition-all">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
-                                </a>
-                                <a href="#" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center hover:bg-orange-50 hover:text-orange-600 transition-all">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                </a>
-                            </div>
+                        <div>
+                            <div class="text-sm font-black text-indigo-950">{{ t.name }}</div>
+                            <div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">{{ t.role }}</div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="pt-8 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div class="text-slate-400 text-[11px] font-medium tracking-wide">
-                        &copy; 2025 DIGITAL PERSONAL JOURNAL. ALL RIGHTS RESERVED.
+        <footer class="bg-white border-t border-slate-100 pt-24 pb-12 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+
+                    <div class="col-span-2 lg:col-span-2">
+                        <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950 mb-6">DPJ<span class="text-orange-500">.</span></div>
+                        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mb-8">
+                            A curated library of digital journaling tools designed to help you think clearly, act intentionally, and live purposefully.
+                        </p>
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-orange-50 hover:text-orange-500 cursor-pointer transition text-xs font-bold">TW</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-orange-50 hover:text-orange-500 cursor-pointer transition text-xs font-bold">IG</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-orange-50 hover:text-orange-500 cursor-pointer transition text-xs font-bold">YT</div>
+                        </div>
                     </div>
+
+                    <div>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest text-indigo-950 mb-6">Collections</h4>
+                        <ul class="space-y-4 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-orange-500 transition">Daily Essential</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Habit Tracker</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Deep Work</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Legacy Yearly</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest text-indigo-950 mb-6">Explore</h4>
+                        <ul class="space-y-4 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-orange-500 transition">Philosophy</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Google Drive Setup</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Automation FAQ</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Prompts Guide</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest text-indigo-950 mb-6">Company</h4>
+                        <ul class="space-y-4 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-orange-500 transition">About Us</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Terms of Use</a></li>
+                            <li><a href="#" class="hover:text-orange-500 transition">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-50 gap-4">
+                    <p class="text-slate-400 text-[10px] font-bold tracking-[0.2em] uppercase">
+                        © 2025 DIGITAL PERSONAL JOURNAL. ALL RIGHTS RESERVED.
+                    </p>
                     <div class="flex items-center gap-6">
-                        <span class="text-[10px] text-slate-300 font-bold tracking-widest uppercase italic">Built for Clarity</span>
+                        <span class="text-[10px] text-slate-300 font-bold italic">Built for Clarity</span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">System Status: Online</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,16 +199,16 @@
 
 <script setup>
 const plans = [
-    { title: 'Essential', price: '12', period: 'mo', features: ['Monthly Artisan Sheets', 'Standard Goal Layouts', 'Instant Drive Sync'], popular: false },
-    { title: 'Habit', price: '29', period: '3 mo', features: ['Quarterly Artisan Set', 'Progress Tracking Sheets', 'Habit-Focused Layouts', 'Priority Drive Sync'], popular: false },
-    { title: 'Focus', price: '49', period: '6 mo', features: ['Fully Customized Prompts', 'Artisan Goal-Mapping', 'Personalized Page Grids', 'Deep Work Templates'], popular: true },
-    { title: 'Legacy', price: '89', period: 'yr', features: ['Bespoke Yearly Strategy', 'Personal Branding on Sheets', 'Executive Goal Layouts', 'Concierge Customization'], popular: false },
+    { title: 'Essential', features: ['Monthly Artisan Sheets', 'Standard Goal Layouts', 'Morning Prompts', 'Instant Drive Sync'] },
+    { title: 'Habit', features: ['Quarterly Artisan Set', 'Progress Tracking', 'Habit-Focused Layouts', 'Priority Drive Sync'] },
+    { title: 'Focus', features: ['Deep Work Prompts', 'Artisan Goal-Mapping', 'Personalized Grids', 'Daily Focus Templates'] },
+    { title: 'Legacy', features: ['Yearly Strategy', 'Executive Layouts', 'Legacy Archive Prompts', 'Full Drive Automation'] },
 ]
 
 const testimonials = [
-    { name: 'Sarah Jenkins', role: 'Creative Lead', quote: 'The bespoke prompts in the Focus plan feel like they were written exactly for my career path.' },
-    { name: 'Marcus Chen', role: 'Founder', quote: 'I’ve tried every journal app. Nothing compares to the quality of these customized DPJ sheets.' },
-    { name: 'Elena Rossi', role: 'Author', quote: 'Beautifully automated and artistically designed. It is the gold standard for digital journaling.' },
+    { name: 'Sarah Jenkins', role: 'Creative Lead', quote: 'I used to pay for these layouts. The fact that they are now free is a gift to the community.' },
+    { name: 'Marcus Chen', role: 'Founder', quote: 'The Legacy collection is how I run my entire quarterly planning now.' },
+    { name: 'Elena Rossi', role: 'Author', quote: 'Artistic, clean, and perfectly integrated with Google Drive. Simply the best.' },
 ]
 </script>
 
