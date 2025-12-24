@@ -163,12 +163,7 @@ class GoogleLoginController extends Controller
         return new Google_Service_Drive($client);
     }
 
-    protected function userCopyTemplate(
-        Google_Service_Drive $drive,
-        string $templateId,
-        string $name,
-        string $folderId
-    ) {
+    protected function userCopyTemplate(Google_Service_Drive $drive, string $templateId, string $name, string $folderId) {
         $file = $drive->files->copy(
             $templateId,
             new Google_Service_Drive_DriveFile(['name' => $name])
