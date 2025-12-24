@@ -4,7 +4,7 @@
         <nav class="sticky top-0 z-50 bg-[#FDFCFB]/80 backdrop-blur-md border-b border-slate-100">
             <div class="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
                 <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950">DPJ<span class="text-orange-500">.</span></div>
-                <div class="items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 hidden md:flex">
+                <div class="items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                     <a href="#collections" class="hover:text-orange-500 transition">Collections</a>
                     <a href="#about" class="hover:text-orange-500 transition">Philosophy</a>
                     <a href="#testimonials" class="hover:text-orange-500 transition">Community</a>
@@ -67,9 +67,13 @@
                         </li>
                     </ul>
 
-                    <button class="w-full py-4 rounded-2xl font-bold text-sm bg-slate-50 text-indigo-950 group-hover:bg-indigo-950 group-hover:text-white transition-all duration-300">
+                    <a
+                        :href="route('google.redirect')"
+                        class="block w-full py-4 rounded-2xl font-bold text-sm bg-slate-50 text-indigo-950
+                        hover:bg-indigo-950 hover:text-white transition-all duration-300 text-center"
+                    >
                         Sync to Drive
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -198,6 +202,18 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { usePage} from "@inertiajs/vue3";
+
+
+const page = usePage()
+
+onMounted(() => {
+    const url = page.props.flash?.drive_url
+    if (url) {
+        window.open(url, '_blank')
+    }
+})
 const plans = [
     { title: 'Essential', features: ['Monthly Artisan Sheets', 'Standard Goal Layouts', 'Morning Prompts', 'Instant Drive Sync'] },
     { title: 'Habit', features: ['Quarterly Artisan Set', 'Progress Tracking', 'Habit-Focused Layouts', 'Priority Drive Sync'] },

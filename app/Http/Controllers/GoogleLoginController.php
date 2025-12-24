@@ -49,11 +49,14 @@ class GoogleLoginController extends Controller
 
         Auth::login($user);
 
+        $driveUrl = null;
+
         if (!$user->googleDrive) {
-            $this->setupUserDrive($user);
+            $folderId = $this->setupUserDrive($user);
+            $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
         }
 
-        return redirect()->route('home');
+        return redirect()->route('home')->with('drive_url', $driveUrl);
     }
 
     /* -----------------------------
@@ -102,6 +105,7 @@ class GoogleLoginController extends Controller
         foreach ($templates as $templateId) {
             $this->adminRevokeTemplate($adminDrive, $templateId, $user->email);
         }
+        return $folder->id;
     }
 
     /* -----------------------------

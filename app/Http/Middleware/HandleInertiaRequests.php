@@ -38,6 +38,11 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             //
+
+            'flash' => [
+                'drive_url' => fn () => $request->session()->get('drive_url'),
+            ],
+
         ];
     }
 }
