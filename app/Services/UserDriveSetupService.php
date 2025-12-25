@@ -1,26 +1,24 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\User;
 use App\Models\UserGoogleDrive;
 use App\Services\Google\GoogleClientFactory;
-use App\Services\Google\GoogleDriveService;
 
 class UserDriveSetupService
 {
-    protected $clientFactory;
+    protected $factory;
 
-    public function __construct(GoogleClientFactory $clientFactory)
+    public function __construct(GoogleClientFactory $factory)
     {
-        $this->clientFactory = $clientFactory;
+        $this->factory = $factory;
     }
 
     public function getOrCreateUserFolder(User $user, string $plan): string
     {
         $existing = UserGoogleDrive::where('user_id', $user->id)->where('plan_type', $plan)->first();
-        $userDrive = new GoogleDriveService(new \Google_Service_Drive($this->clientFactory->createUserClient($user)));
+        $userDrive = $this->factory->createUserDriveService($user);
 
         if ($existing && $userDrive->isFolderValid($existing->folder_id)) {
             return $existing->folder_id;
@@ -31,10 +29,9 @@ class UserDriveSetupService
         return $this->setupNewDrive($user, $plan, $userDrive);
     }
 
-    private function setupNewDrive(User $user, string $plan, GoogleDriveService $userDrive): string
+    private function setupNewDrive(User $user, string $plan, $userDrive): string
     {
-        $adminDrive = new GoogleDriveService(new \Google_Service_Drive($this->clientFactory->createAdminClient()));
-
+        $adminDrive = $this->factory->createAdminDriveService();
         $templates = $this->getTemplatesForPlan($plan);
         $folderId = $userDrive->createFolder("DPJ (" . ucfirst($plan) . ") - {$user->name}");
 

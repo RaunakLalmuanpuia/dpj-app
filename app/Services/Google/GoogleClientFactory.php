@@ -4,18 +4,20 @@ namespace App\Services\Google;
 
 use App\Models\User;
 use Google_Client;
+use Google_Service_Drive;
 
 class GoogleClientFactory
 {
-    public function createAdminClient(): Google_Client
+    public function createAdminDriveService(): GoogleDriveService
     {
         $client = new Google_Client();
         $client->setAuthConfig(storage_path('app/private/google/admin-service-account.json'));
-        $client->addScope(\Google_Service_Drive::DRIVE);
-        return $client;
+        $client->addScope(Google_Service_Drive::DRIVE);
+
+        return new GoogleDriveService(new Google_Service_Drive($client));
     }
 
-    public function createUserClient(User $user): Google_Client
+    public function createUserDriveService(User $user): GoogleDriveService
     {
         $client = new Google_Client();
         $client->setClientId(config('services.google.client_id'));
@@ -31,6 +33,6 @@ class GoogleClientFactory
             $user->update(['google_access_token' => $token['access_token']]);
         }
 
-        return $client;
+        return new GoogleDriveService(new Google_Service_Drive($client));
     }
 }
