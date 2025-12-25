@@ -8,6 +8,8 @@ use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use Google_Service_Drive_Permission;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -16,8 +18,11 @@ class GoogleLoginController extends Controller
     /* -----------------------------
      | GOOGLE LOGIN
      |-----------------------------*/
-    public function redirectToGoogle()
+    public function redirectToGoogle(Request $request)
     {
+        // Store the plan in the 'state' parameter
+        $state = bin2hex(random_bytes(16)) . '-' . $request->query('plan', 'essential');
+//        dd($state);
         return Socialite::driver('google')
             ->scopes([
                 'openid',
@@ -28,13 +33,19 @@ class GoogleLoginController extends Controller
             ->with([
                 'access_type' => 'offline',
                 'prompt' => 'consent',
+                'state' => $state,
             ])
             ->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
+
+        // Extract plan from state (e.g., "randomhash-habit" -> "habit")
+        $state = $request->input('state');
+        $plan = str_contains($state, '-') ? explode('-', $state)[1] : 'essential';
+
 
         $user = User::updateOrCreate(
             ['email' => $googleUser->email],
@@ -52,7 +63,7 @@ class GoogleLoginController extends Controller
         $driveUrl = null;
 
         if (!$user->googleDrive) {
-            $folderId = $this->setupUserDrive($user);
+            $folderId = $this->setupUserDrive($user, $plan);
             $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
         }
 
@@ -62,49 +73,51 @@ class GoogleLoginController extends Controller
     /* -----------------------------
      | MAIN SETUP FLOW
      |-----------------------------*/
-    protected function setupUserDrive(User $user)
+    protected function setupUserDrive(User $user, string $plan)
     {
         $adminDrive = $this->adminDrive();
         $userDrive  = $this->userDrive($user);
 
-        // 1️⃣ Create user folder
-        $folder = $userDrive->files->create(
-            new Google_Service_Drive_DriveFile([
-                'name' => 'DPJ - ' . $user->name,
-                'mimeType' => 'application/vnd.google-apps.folder',
-            ]),
-            ['fields' => 'id']
-        );
-
-        $templates = [
-            env('GOOGLE_TEMPLATE_SHEET_1'),
-            env('GOOGLE_TEMPLATE_SHEET_2'),
-            env('GOOGLE_TEMPLATE_SHEET_3'),
+        // Define different templates based on the plan
+        $planTemplates = [
+            'essential' => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_2')],
+            'habit'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_3'), env('GOOGLE_TEMPLATE_SHEET_4')],
+            'focus'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_5')],
+            'legacy'    => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_2'), env('GOOGLE_TEMPLATE_SHEET_3'), env('GOOGLE_TEMPLATE_SHEET_4')],
         ];
 
-        // 2️⃣ ADMIN → Share templates
-        foreach ($templates as $templateId) {
+        $templates = $planTemplates[$plan] ?? $planTemplates['essential'];
+
+        // 1. Create Folder
+        $folder = $userDrive->files->create(new Google_Service_Drive_DriveFile([
+            'name' => 'DPJ (' . ucfirst($plan) . ') - ' . $user->name,
+            'mimeType' => 'application/vnd.google-apps.folder',
+        ]), ['fields' => 'id']);
+
+        // 2. Process Templates
+        $createdIds = [];
+        foreach ($templates as $index => $templateId) {
             $this->adminShareTemplate($adminDrive, $templateId, $user->email);
+
+            $newFileId = $this->userCopyTemplate(
+                $userDrive,
+                $templateId,
+                "Sheet " . ($index + 1),
+                $folder->id
+            );
+
+            $createdIds[] = $newFileId;
+
+            $this->adminRevokeTemplate($adminDrive, $templateId, $user->email);
         }
 
-        // 3️⃣ USER → Copy templates
-        $sheet1 = $this->userCopyTemplate($userDrive, $templates[0], 'Sheet One', $folder->id);
-        $sheet2 = $this->userCopyTemplate($userDrive, $templates[1], 'Sheet Two', $folder->id);
-        $sheet3 = $this->userCopyTemplate($userDrive, $templates[2], 'Sheet Three', $folder->id);
-
-        // 4️⃣ Save DB
         UserGoogleDrive::create([
             'user_id' => $user->id,
             'folder_id' => $folder->id,
-            'sheet_1_id' => $sheet1,
-            'sheet_2_id' => $sheet2,
-            'sheet_3_id' => $sheet3,
+            'plan_type' => $plan, // Store which plan they chose
+            'sheet_ids' => json_encode($createdIds),
         ]);
 
-        // 5️⃣ ADMIN → Revoke access
-        foreach ($templates as $templateId) {
-            $this->adminRevokeTemplate($adminDrive, $templateId, $user->email);
-        }
         return $folder->id;
     }
 

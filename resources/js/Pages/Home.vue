@@ -68,7 +68,7 @@
                     </ul>
 
                     <a
-                        :href="route('google.redirect')"
+                        :href="route('google.redirect',{ plan: plan.title.toLowerCase() })"
                         class="block w-full py-4 rounded-2xl font-bold text-sm bg-slate-50 text-indigo-950
                         hover:bg-indigo-950 hover:text-white transition-all duration-300 text-center"
                     >

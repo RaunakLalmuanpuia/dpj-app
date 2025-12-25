@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('user_google_drives', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('plan_type')->default('essential'); // Track which plan was chosen
             $table->string('folder_id');
-            $table->string('sheet_1_id');
-            $table->string('sheet_2_id');
-            $table->string('sheet_3_id');
+            $table->json('sheet_ids'); // Stores ['sheet_1_id' => '...', 'sheet_2_id' => '...']
             $table->timestamps();
         });
     }
