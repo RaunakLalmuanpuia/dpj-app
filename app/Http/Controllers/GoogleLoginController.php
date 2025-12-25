@@ -60,12 +60,20 @@ class GoogleLoginController extends Controller
 
         Auth::login($user);
 
-        $driveUrl = null;
+        // Check if this specific user already has THIS specific plan synced
+        $existingPlan = UserGoogleDrive::where('user_id', $user->id)
+            ->where('plan_type', $plan)
+            ->first();
 
-        if (!$user->googleDrive) {
+        if (!$existingPlan) {
             $folderId = $this->setupUserDrive($user, $plan);
-            $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
         }
+        else {
+            // 3. Use the existing ID if it does
+            $folderId = $existingPlan->folder_id;
+        }
+        // Generate the URL using the $folderId from either branch
+        $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
 
         return redirect()->route('home')->with('drive_url', $driveUrl);
     }
