@@ -60,21 +60,38 @@ class GoogleLoginController extends Controller
 
         Auth::login($user);
 
-        // Check if this specific user already has THIS specific plan synced
         $existingPlan = UserGoogleDrive::where('user_id', $user->id)
             ->where('plan_type', $plan)
             ->first();
 
-        if (!$existingPlan) {
+        $needsNewFolder = true;
+        $folderId = null;
+
+        if ($existingPlan) {
+            try {
+                $service = $this->userDrive($user);
+                // Request the 'trashed' field specifically
+                $file = $service->files->get($existingPlan->folder_id, ['fields' => 'id, trashed']);
+
+                // If it exists AND is NOT in the bin
+                if (!$file->getTrashed()) {
+                    $needsNewFolder = false;
+                    $folderId = $existingPlan->folder_id;
+                } else {
+                    // It's in the bin, so delete our DB record to trigger a fresh start
+                    $existingPlan->delete();
+                }
+            } catch (\Exception $e) {
+                // Folder doesn't exist at all
+                $existingPlan->delete();
+            }
+        }
+
+        if ($needsNewFolder) {
             $folderId = $this->setupUserDrive($user, $plan);
         }
-        else {
-            // 3. Use the existing ID if it does
-            $folderId = $existingPlan->folder_id;
-        }
-        // Generate the URL using the $folderId from either branch
-        $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
 
+        $driveUrl = "https://drive.google.com/drive/folders/{$folderId}";
         return redirect()->route('home')->with('drive_url', $driveUrl);
     }
 
@@ -119,12 +136,21 @@ class GoogleLoginController extends Controller
             $this->adminRevokeTemplate($adminDrive, $templateId, $user->email);
         }
 
-        UserGoogleDrive::create([
-            'user_id' => $user->id,
-            'folder_id' => $folder->id,
-            'plan_type' => $plan, // Store which plan they chose
-            'sheet_ids' => json_encode($createdIds),
-        ]);
+        // Inside setupUserDrive
+        UserGoogleDrive::updateOrCreate(
+            ['user_id' => $user->id, 'plan_type' => $plan],
+            [
+                'folder_id' => $folder->id,
+                'sheet_ids' => json_encode($createdIds),
+            ]
+        );
+
+//        UserGoogleDrive::create([
+//            'user_id' => $user->id,
+//            'folder_id' => $folder->id,
+//            'plan_type' => $plan, // Store which plan they chose
+//            'sheet_ids' => json_encode($createdIds),
+//        ]);
 
         return $folder->id;
     }
