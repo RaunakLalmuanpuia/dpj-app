@@ -45,9 +45,42 @@ class GoogleLoginController extends Controller
 
         Auth::login($user);
 
-        $folderId = $this->setupService->getOrCreateUserFolder($user, $plan);
+        if (in_array($plan, ['pro', 'enterprise'])) {
+            $api = new \Razorpay\Api\Api(config('services.razorpay.key'), config('services.razorpay.secret'));
 
-        return redirect()->route('home')
-            ->with('drive_url', "https://drive.google.com/drive/folders/{$folderId}");
+            $prices = ['pro' => 499, 'enterprise' => 999];
+            $order = $api->order->create([
+                'receipt' => 'rcpt_' . $user->id . '_' . time(),
+                'amount' => $prices[$plan] * 100,
+                'currency' => 'INR',
+            ]);
+
+            // Record the pending payment
+            \App\Models\Payment::create([
+                'user_id' => $user->id,
+                'plan_type' => $plan,
+                'razorpay_order_id' => $order['id'],
+                'amount' => $prices[$plan],
+                'status' => 'pending',
+            ]);
+
+            // Redirect to home but carry the order details in the session
+            return redirect()->route('home')->with('razorpay_order', [
+                'id' => $order['id'],
+                'amount' => $order['amount'],
+                'plan' => $plan,
+                'razorpay_key' => config('services.razorpay.key'),
+                'user_name' => $user->name,
+                'user_email' => $user->email,
+            ]);
+        }
+        else{
+            $folderId = $this->setupService->getOrCreateUserFolder($user, $plan);
+
+            return redirect()->route('home')
+                ->with('drive_url', "https://drive.google.com/drive/folders/{$folderId}");
+        }
+
+
     }
 }

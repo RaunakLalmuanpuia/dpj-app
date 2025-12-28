@@ -50,7 +50,7 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
                 <div v-for="(plan, index) in plans" :key="index"
                      class="relative group p-8 rounded-[2.5rem] bg-white border border-slate-100 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 overflow-hidden">
 
@@ -62,7 +62,9 @@
 
                     <ul class="space-y-4 mb-10 min-h-[160px]">
                         <li v-for="feat in plan.features" :key="feat" class="text-sm text-slate-600 flex items-start gap-3">
-                            <svg class="w-4 h-4 text-orange-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-4 h-4 text-orange-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                            </svg>
                             <span>{{ feat }}</span>
                         </li>
                     </ul>
@@ -202,23 +204,18 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { usePage} from "@inertiajs/vue3";
-
+import { onMounted,watch } from 'vue'
+import { usePage, router} from "@inertiajs/vue3";
+import { useQuasar, QSpinnerIos } from 'quasar' // Import Quasar utilities
 
 const page = usePage()
+const $q = useQuasar()
 
-onMounted(() => {
-    const url = page.props.flash?.drive_url
-    if (url) {
-        window.open(url, '_blank')
-    }
-})
+
 const plans = [
-    { title: 'Essential', features: ['Monthly Artisan Sheets', 'Standard Goal Layouts', 'Morning Prompts', 'Instant Drive Sync'] },
-    { title: 'Habit', features: ['Quarterly Artisan Set', 'Progress Tracking', 'Habit-Focused Layouts', 'Priority Drive Sync'] },
-    { title: 'Focus', features: ['Deep Work Prompts', 'Artisan Goal-Mapping', 'Personalized Grids', 'Daily Focus Templates'] },
-    { title: 'Legacy', features: ['Yearly Strategy', 'Executive Layouts', 'Legacy Archive Prompts', 'Full Drive Automation'] },
+    { title: 'Free', features: ['Monthly Artisan Sheets', 'Standard Goal Layouts', 'Morning Prompts', 'Instant Drive Sync'] },
+    { title: 'Pro', features: ['Quarterly Artisan Set', 'Progress Tracking', 'Habit-Focused Layouts', 'Priority Drive Sync'] },
+    { title: 'Enterprise', features: ['Deep Work Prompts', 'Artisan Goal-Mapping', 'Personalized Grids', 'Daily Focus Templates'] },
 ]
 
 const testimonials = [
@@ -226,6 +223,98 @@ const testimonials = [
     { name: 'Marcus Chen', role: 'Founder', quote: 'The Legacy collection is how I run my entire quarterly planning now.' },
     { name: 'Elena Rossi', role: 'Author', quote: 'Artistic, clean, and perfectly integrated with Google Drive. Simply the best.' },
 ]
+// --- 1. Global Page Loader ---
+// Shows Quasar loader during any Inertia navigation/processing
+router.on('start', () => {
+    $q.loading.show({
+        spinner: QSpinnerIos,
+        message: 'Syncing your artisan sheets...',
+        backgroundColor: 'indigo-10',
+    })
+})
+router.on('finish', () => $q.loading.hide())
+
+// --- 2. Razorpay Script Loader ---
+const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+        if (window.Razorpay) { resolve(true); return; }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => resolve(true);
+        document.head.appendChild(script);
+    });
+};
+
+// --- 3. Trigger Payment ---
+const triggerPayment = (orderData) => {
+    const options = {
+        key: orderData.razorpay_key,
+        amount: orderData.amount,
+        currency: "INR",
+        name: "DPJ",
+        description: `Unlocking ${orderData.plan} Plan`,
+        order_id: orderData.id,
+        handler: function (response) {
+            router.post(route('payment.verify'), {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                plan: orderData.plan
+            });
+        },
+        prefill: { name: orderData.user_name, email: orderData.user_email },
+        theme: { color: "#1e1b4b" } // Indigo-950
+    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+};
+
+
+
+// --- 4. Flash Message Watcher ---
+watch(() => page.props.flash, (flash) => {
+    if (!flash) return;
+
+    // A. Handle Drive URL
+    if (flash.drive_url) {
+        // Logic: If there's an order ID, it was a paid plan -> Show Dialog
+        // If no order ID, it was a 'Free' plan -> Open Tab directly
+        if (page.props.flash.razorpay_order || flash.is_paid) {
+            $q.dialog({
+                title: '<span class="text-indigo-950 font-serif">Workspace Ready</span>',
+                message: 'Your premium collection has been generated. Would you like to open your Google Drive folder now?',
+                html: true,
+                ok: { label: 'Open Drive', color: 'orange-5', unelevated: true },
+                cancel: { label: 'Maybe Later', color: 'slate', flat: true },
+                persistent: true
+            }).onOk(() => {
+                window.open(flash.drive_url, '_blank');
+
+            });
+        } else {
+            // It's the FREE version -> Direct open (browser might block, but no dialog shown)
+            window.open(flash.drive_url, '_blank');
+        }
+    }
+
+    // B. Handle Errors
+    if (flash.error) {
+        $q.dialog({
+            title: 'Action Required',
+            message: flash.error,
+            ok: { color: 'negative' }
+        });
+    }
+}, { deep: true, immediate: true });
+
+onMounted(async () => {
+    const orderData = page.props.flash.razorpay_order;
+    if (orderData) {
+        await loadRazorpayScript();
+        triggerPayment(orderData);
+    }
+});
 </script>
 
 <style>

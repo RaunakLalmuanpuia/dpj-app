@@ -40,7 +40,11 @@ class HandleInertiaRequests extends Middleware
             //
 
             'flash' => [
+                'razorpay_order' => fn () => $request->session()->get('razorpay_order'),
+                'is_paid' => fn () => $request->session()->get('is_paid'),
                 'drive_url' => fn () => $request->session()->get('drive_url'),
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
             ],
 
         ];

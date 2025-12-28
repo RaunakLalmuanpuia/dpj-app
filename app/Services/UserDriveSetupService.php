@@ -53,11 +53,10 @@ class UserDriveSetupService
     private function getTemplatesForPlan(string $plan): array
     {
         $map = [
-            'essential' => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_2')],
-            'habit'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_3'), env('GOOGLE_TEMPLATE_SHEET_4')],
-            'focus'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_5')],
-            'legacy'    => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_2'), env('GOOGLE_TEMPLATE_SHEET_3'), env('GOOGLE_TEMPLATE_SHEET_4')],
+            'free' => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_2')],
+            'pro'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_3'), env('GOOGLE_TEMPLATE_SHEET_4')],
+            'enterprise'     => [env('GOOGLE_TEMPLATE_SHEET_1'), env('GOOGLE_TEMPLATE_SHEET_5')],
         ];
-        return $map[$plan] ?? $map['essential'];
+        return $map[$plan] ?? $map['free'];
     }
 }
