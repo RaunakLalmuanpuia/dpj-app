@@ -36,6 +36,9 @@ class PaymentController extends Controller
             $payment->update([
                 'folder_id_created' => $folderId,
             ]);
+
+            //Notify User...
+
             return redirect()->route('home')
                 ->with('drive_url', "https://drive.google.com/drive/folders/{$folderId}")->with('is_paid', true);
 
@@ -46,5 +49,39 @@ class PaymentController extends Controller
 
             return redirect()->route('home')->with('error', 'Payment verification failed.');
         }
+    }
+
+    public function handleWebhook(Request $request, UserDriveSetupService $setupService)
+    {
+
+        $payload = $request->getContent();
+
+        $data = json_decode($payload, true);
+
+        // 1. Handle payment.captured event
+        if ($data['event'] === 'payment.captured') {
+            $orderId = $data['payload']['payment']['entity']['order_id'];
+            $paymentId = $data['payload']['payment']['entity']['id'];
+
+            $payment = Payment::where('razorpay_order_id', $orderId)->first();
+
+            if ($payment && $payment->status !== 'completed') {
+                // Update payment record
+                $payment->update([
+                    'razorpay_payment_id' => $paymentId,
+                    'status' => 'completed',
+                ]);
+
+                // Trigger Drive Setup
+                $user = $payment->user;
+                $setupService->getOrCreateUserFolder($user, $payment->plan_type);
+
+                //Notify User...
+                Log::info("Webhook processed Drive setup for User: {$user->email}");
+
+            }
+        }
+
+        return response()->json(['status' => 'success'], 200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\UserGoogleDrive;
 use App\Services\Google\GoogleClientFactory;
+use Illuminate\Support\Facades\DB;
 
 class UserDriveSetupService
 {
@@ -17,16 +18,19 @@ class UserDriveSetupService
 
     public function getOrCreateUserFolder(User $user, string $plan): string
     {
-        $existing = UserGoogleDrive::where('user_id', $user->id)->where('plan_type', $plan)->first();
-        $userDrive = $this->factory->createUserDriveService($user);
+        return DB::transaction(function () use ($user, $plan) {
+            $existing = UserGoogleDrive::where('user_id', $user->id)->where('plan_type', $plan)->first();
+            $userDrive = $this->factory->createUserDriveService($user);
 
-        if ($existing && $userDrive->isFolderValid($existing->folder_id)) {
-            return $existing->folder_id;
-        }
+            if ($existing && $userDrive->isFolderValid($existing->folder_id)) {
+                return $existing->folder_id;
+            }
 
-        if ($existing) $existing->delete();
+            if ($existing) $existing->delete();
 
-        return $this->setupNewDrive($user, $plan, $userDrive);
+            return $this->setupNewDrive($user, $plan, $userDrive);
+        });
+
     }
 
     private function setupNewDrive(User $user, string $plan, $userDrive): string

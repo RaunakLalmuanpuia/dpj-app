@@ -77,6 +77,8 @@ class GoogleLoginController extends Controller
         else{
             $folderId = $this->setupService->getOrCreateUserFolder($user, $plan);
 
+            // Notify User
+
             return redirect()->route('home')
                 ->with('drive_url', "https://drive.google.com/drive/folders/{$folderId}");
         }

@@ -12,3 +12,5 @@ Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::clas
 Route::get('/google-callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::post('/payment-verify', [App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('payment.verify');
+
+Route::post('/webhooks/razorpay', [App\Http\Controllers\PaymentController::class, 'handleWebhook']);
