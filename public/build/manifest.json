@@ -1,4 +1,8 @@
 {
+  "__plugin-vue_export-helper-DlAUqK2U.js": {
+    "file": "assets/_plugin-vue_export-helper-DlAUqK2U.js",
+    "name": "_plugin-vue_export-helper"
+  },
   "node_modules/@quasar/extras/material-icons-outlined/web-font/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcY.woff": {
     "file": "assets/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcY-BpWbwl2n.woff",
     "src": "node_modules/@quasar/extras/material-icons-outlined/web-font/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcY.woff"
@@ -16,18 +20,104 @@
     "src": "node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-YT_9MUUu.css",
+    "file": "assets/app-CgoYnbVB.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/js/Pages/Backend/Dashboard.vue": {
+    "file": "assets/Dashboard-DxNJxGeF.js",
+    "name": "Dashboard",
+    "src": "resources/js/Pages/Backend/Dashboard.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-DlAUqK2U.js"
+    ]
+  },
+  "resources/js/Pages/Frontend/CancellationRefund.vue": {
+    "file": "assets/CancellationRefund-CH5tkcvS.js",
+    "name": "CancellationRefund",
+    "src": "resources/js/Pages/Frontend/CancellationRefund.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-DlAUqK2U.js",
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/CancellationRefund-5cr0pQKX.css",
+      "assets/app-CgoYnbVB.css"
+    ]
+  },
+  "resources/js/Pages/Frontend/Contact.vue": {
+    "file": "assets/Contact-CDD7OfWj.js",
+    "name": "Contact",
+    "src": "resources/js/Pages/Frontend/Contact.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "__plugin-vue_export-helper-DlAUqK2U.js"
+    ],
+    "css": [
+      "assets/Contact-D1j-Lliu.css",
+      "assets/app-CgoYnbVB.css"
+    ]
+  },
+  "resources/js/Pages/Frontend/Privacy.vue": {
+    "file": "assets/Privacy-rbrpgI_L.js",
+    "name": "Privacy",
+    "src": "resources/js/Pages/Frontend/Privacy.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-DlAUqK2U.js",
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/Privacy-SsTBzDJH.css",
+      "assets/app-CgoYnbVB.css"
+    ]
+  },
+  "resources/js/Pages/Frontend/Terms.vue": {
+    "file": "assets/Terms-DANeW2Jl.js",
+    "name": "Terms",
+    "src": "resources/js/Pages/Frontend/Terms.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-DlAUqK2U.js",
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/Terms-B7F902eA.css",
+      "assets/app-CgoYnbVB.css"
+    ]
+  },
+  "resources/js/Pages/Home.vue": {
+    "file": "assets/Home-B6uYtKqN.js",
+    "name": "Home",
+    "src": "resources/js/Pages/Home.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/Home-BElvGydG.css",
+      "assets/app-CgoYnbVB.css"
+    ]
+  },
   "resources/js/app.js": {
-    "file": "assets/app-fPORuhsB.js",
+    "file": "assets/app-BvdhLubP.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+    "dynamicImports": [
+      "resources/js/Pages/Backend/Dashboard.vue",
+      "resources/js/Pages/Frontend/CancellationRefund.vue",
+      "resources/js/Pages/Frontend/Contact.vue",
+      "resources/js/Pages/Frontend/Privacy.vue",
+      "resources/js/Pages/Frontend/Terms.vue",
+      "resources/js/Pages/Home.vue"
+    ],
     "css": [
-      "assets/app-DCP98dNL.css",
-      "assets/app-YT_9MUUu.css"
+      "assets/app-BMQuAkGV.css",
+      "assets/app-CgoYnbVB.css"
     ],
     "assets": [
       "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-D-x-0Q06.woff2",
