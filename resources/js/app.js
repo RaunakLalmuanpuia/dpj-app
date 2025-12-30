@@ -16,7 +16,7 @@ import {ZiggyVue} from "../../vendor/tightenco/ziggy/dist"
 import { Dialog, Loading, Notify, Quasar } from "quasar";
 
 
-const appName = import.meta.env.VITE_APP_NAME || 'DPJ';
+const appName = import.meta.env.VITE_APP_NAME || 'KTJ';
 
 createInertiaApp({
     title: (title) => `${appName}`,
