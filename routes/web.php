@@ -14,3 +14,21 @@ Route::get('/google-callback', [App\Http\Controllers\GoogleLoginController::clas
 Route::post('/payment-verify', [App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('payment.verify');
 
 Route::post('/webhooks/razorpay', [App\Http\Controllers\PaymentController::class, 'handleWebhook']);
+
+
+Route::get('/privacy', function () {
+    return Inertia::render('Frontend/Privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return Inertia::render('Frontend/Terms');
+})->name('terms');
+
+Route::get('/contact', function () {
+    return Inertia::render('Frontend/Contact');
+})->name('contact');
+
+Route::get('/cancellation', function () {
+    return Inertia::render('Frontend/CancellationRefund');
+})->name('cancellation');
+

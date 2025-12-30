@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
         ]);
         $middleware->validateCsrfTokens(except: [
+            'google-callback',
             'webhooks/razorpay', // Exclude the webhook route
         ]);
     })

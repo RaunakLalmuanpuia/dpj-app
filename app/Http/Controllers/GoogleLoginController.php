@@ -22,7 +22,7 @@ class GoogleLoginController extends Controller
         $state = bin2hex(random_bytes(16)) . '-' . $request->query('plan', 'essential');
 
         return Socialite::driver('google')
-            ->scopes(['openid', 'profile', 'email', 'https://www.googleapis.com/auth/drive'])
+            ->scopes(['openid', 'profile', 'email', 'https://www.googleapis.com/auth/drive.file'])
             ->with(['access_type' => 'offline', 'prompt' => 'consent', 'state' => $state])
             ->redirect();
     }

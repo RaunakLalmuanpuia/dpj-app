@@ -3,7 +3,7 @@
 
         <nav class="sticky top-0 z-50 bg-[#FDFCFB]/80 backdrop-blur-md border-b border-slate-100">
             <div class="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
-                <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950">DPJ<span
+                <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950">KTJ<span
                     class="text-orange-500">.</span></div>
                 <div class="items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                     <a href="#collections" class="hover:text-orange-500 transition">Collections</a>
@@ -200,7 +200,7 @@
 
                     <div class="col-span-2 lg:col-span-2">
 
-                        <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950 mb-6">DPJ<span
+                        <div class="text-3xl font-serif font-black tracking-tighter text-indigo-950 mb-6">KTJ<span
                             class="text-orange-500">.</span></div>
 
                         <p class="text-slate-500 text-sm leading-relaxed max-w-xs mb-8">
@@ -272,13 +272,13 @@
 
                         <ul class="space-y-4 text-sm text-slate-500">
 
-                            <li><a href="#" class="hover:text-orange-500 transition">About Us</a></li>
+                            <li><a :href="route('contact')" class="hover:text-orange-500 transition">Contact Us</a></li>
 
-                            <li><a href="#" class="hover:text-orange-500 transition">Privacy Policy</a></li>
+                            <li><a :href="route('privacy')" class="hover:text-orange-500 transition">Privacy Policy</a></li>
 
-                            <li><a href="#" class="hover:text-orange-500 transition">Terms of Use</a></li>
+                            <li><a :href="route('terms')" class="hover:text-orange-500 transition">Terms of Use</a></li>
 
-                            <li><a href="#" class="hover:text-orange-500 transition">Support</a></li>
+                            <li><a :href="route('cancellation')" class="hover:text-orange-500 transition">Cancellation & Refund</a></li>
 
                         </ul>
 
@@ -289,8 +289,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-50 gap-4">
 
                     <p class="text-slate-400 text-[10px] font-bold tracking-[0.2em] uppercase">
-
-                        © 2025 DIGITAL PERSONAL JOURNAL. ALL RIGHTS RESERVED.
+                        © 2025 KeyTag JOURNAL. ALL RIGHTS RESERVED.
 
                     </p>
 
@@ -397,7 +396,7 @@ const triggerPayment = (orderData) => {
         key: orderData.razorpay_key,
         amount: orderData.amount,
         currency: "INR",
-        name: "DPJ",
+        name: "KTJ",
         description: `Unlocking ${orderData.plan} Collection`,
         order_id: orderData.id,
         handler: function (response) {
