@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserGoogleDrive;
 use App\Services\Google\GoogleClientFactory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserDriveSetupService
 {
@@ -22,6 +23,7 @@ class UserDriveSetupService
             $existing = UserGoogleDrive::where('user_id', $user->id)->where('plan_type', $plan)->first();
             $userDrive = $this->factory->createUserDriveService($user);
 
+            // Validate existing folder
             if ($existing && $userDrive->isFolderValid($existing->folder_id)) {
                 return $existing->folder_id;
             }
@@ -37,27 +39,33 @@ class UserDriveSetupService
         $adminDrive = $this->factory->createAdminDriveService();
         $templates = $this->getTemplatesForPlan($plan);
 
-        // 1. User creates the main folder
+        // 1. User creates the container folder (User Owns Folder)
         $folderId = $userDrive->createFolder("DPJ (" . ucfirst($plan) . ") - {$user->name}");
 
+        // 2. Get Service Account Email to grant write access
+        $serviceAccountEmail = $this->factory->getServiceAccountEmail();
+
+        // 3. User grants 'Writer' access to Service Account so it can drop files here
+        $userDrive->share($folderId, $serviceAccountEmail, 'writer');
+
         $createdIds = [];
-
-        // The MIME type for Excel (used as the transport format)
-        $excelMime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
         foreach ($templates as $index => $templateId) {
-            // 2. Admin EXPORTS the template to RAM (as Excel)
-            // This reads the file content without needing permission to 'copy' it directly
-            $fileContent = $adminDrive->exportFile($templateId, $excelMime);
+            // 4. Admin performs the copy (Preserves Scripts)
+            // Note: This consumes SERVICE ACCOUNT Quota, not User Quota
+            try {
+                $createdIds[] = $adminDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
+            } catch (\Exception $e) {
+                // Catch quota errors specifically to give clearer logs
+                Log::error("Drive Copy Failed: " . $e->getMessage());
+                throw $e;
+            }
+        }
 
-            // 3. User UPLOADS the content as a new Sheet
-            // Since the User is uploading, the User OWNS the file and uses THEIR quota.
-            $createdIds[] = $userDrive->createFile(
-                "Sheet " . ($index + 1), // Name
-                $folderId,                // Parent
-                $fileContent,             // Data
-                $excelMime                // Source Type
-            );
+        // 5. Cleanup: Revoke Service Account access (Optional, keeping it can help with debugging)
+        try {
+            $userDrive->revokeAccess($folderId, $serviceAccountEmail);
+        } catch (\Exception $e) {
+            Log::warning("Failed to revoke SA access: " . $e->getMessage());
         }
 
         UserGoogleDrive::updateOrCreate(
