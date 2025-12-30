@@ -15,9 +15,6 @@ class GoogleDriveService
         $this->service = $service;
     }
 
-    /**
-     * Create a Folder
-     */
     public function createFolder(string $name): string
     {
         $folder = $this->service->files->create(new Google_Service_Drive_DriveFile([
@@ -28,41 +25,46 @@ class GoogleDriveService
         return $folder->id;
     }
 
-    /**
-     * Create a file from content (Upload)
-     * Automatically converts Excel/CSV content to Google Sheets if mimeType matches.
-     */
-    public function createFile(string $name, string $parentId, string $content, string $contentType): string
+    public function copyFile(string $fileId, string $newName, string $folderId): string
     {
+        // Define parents immediately to prevent orphan files
         $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => $name,
-            'parents' => [$parentId],
-            // improving compatibility: explicitly ask Google to convert to Sheet
-            'mimeType' => 'application/vnd.google-apps.spreadsheet'
+            'name' => $newName,
+            'parents' => [$folderId]
         ]);
 
-        $file = $this->service->files->create(
-            $fileMetadata,
-            [
-                'data' => $content,
-                'mimeType' => $contentType, // The mimeType of the data being uploaded (e.g., Excel)
-                'uploadType' => 'multipart',
-                'fields' => 'id'
-            ]
-        );
+        $copy = $this->service->files->copy($fileId, $fileMetadata);
 
-        return $file->id;
+        return $copy->id;
     }
 
     /**
-     * Export a Google Doc/Sheet to a binary string (e.g., as Excel)
+     * Share a file or folder with a specific email
      */
-    public function exportFile(string $fileId, string $mimeType): string
+    public function share(string $fileId, string $email, string $role = 'reader'): void
     {
-        // 'alt' => 'media' tells Google to download the content
-        $response = $this->service->files->export($fileId, $mimeType, ['alt' => 'media']);
+        $permission = new Google_Service_Drive_Permission([
+            'type' => 'user',
+            'role' => $role,
+            'emailAddress' => $email,
+        ]);
 
-        return (string) $response->getBody();
+        // sendNotificationEmail: false prevents spamming the Service Account
+        $this->service->permissions->create($fileId, $permission, ['sendNotificationEmail' => false]);
+    }
+
+    public function revokeAccess(string $fileId, string $email): void
+    {
+        try {
+            $permissions = $this->service->permissions->listPermissions($fileId);
+            foreach ($permissions as $permission) {
+                if ($permission->emailAddress === $email) {
+                    $this->service->permissions->delete($fileId, $permission->id);
+                }
+            }
+        } catch (\Exception $e) {
+            // Ignore errors if permission is already gone
+        }
     }
 
     public function isFolderValid(string $folderId): bool
