@@ -37,30 +37,27 @@ class UserDriveSetupService
         $adminDrive = $this->factory->createAdminDriveService();
         $templates = $this->getTemplatesForPlan($plan);
 
-        // 1. User creates the folder (User is Owner)
+        // 1. User creates the main folder
         $folderId = $userDrive->createFolder("DPJ (" . ucfirst($plan) . ") - {$user->name}");
 
-        // 2. Get Service Account Email
-        $serviceAccountEmail = $this->factory->getServiceAccountEmail();
-
-        // 3. User shares the NEW FOLDER with Service Account (as Writer)
-        // This allows the Service Account to put files into this folder.
-        $userDrive->share($folderId, $serviceAccountEmail, 'writer');
-
         $createdIds = [];
-        foreach ($templates as $index => $templateId) {
-            // 4. Admin (Service Account) performs the copy.
-            // Admin owns the template, and now has write access to the destination folder.
-            $createdIds[] = $adminDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
-        }
 
-        // 5. Cleanup: User revokes Service Account access to the folder
-        try {
-            $userDrive->revokeAccess($folderId, $serviceAccountEmail);
-        } catch (\Exception $e) {
-            // Log this silently; it's not critical if revocation fails,
-            // but prevents the main flow from breaking.
-            \Illuminate\Support\Facades\Log::warning("Failed to revoke SA access: " . $e->getMessage());
+        // The MIME type for Excel (used as the transport format)
+        $excelMime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+        foreach ($templates as $index => $templateId) {
+            // 2. Admin EXPORTS the template to RAM (as Excel)
+            // This reads the file content without needing permission to 'copy' it directly
+            $fileContent = $adminDrive->exportFile($templateId, $excelMime);
+
+            // 3. User UPLOADS the content as a new Sheet
+            // Since the User is uploading, the User OWNS the file and uses THEIR quota.
+            $createdIds[] = $userDrive->createFile(
+                "Sheet " . ($index + 1), // Name
+                $folderId,                // Parent
+                $fileContent,             // Data
+                $excelMime                // Source Type
+            );
         }
 
         UserGoogleDrive::updateOrCreate(
