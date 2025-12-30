@@ -27,7 +27,6 @@ class GoogleDriveService
 
     public function copyFile(string $fileId, string $newName, string $folderId): string
     {
-        // Define parents immediately to prevent orphan files
         $fileMetadata = new Google_Service_Drive_DriveFile([
             'name' => $newName,
             'parents' => [$folderId]
@@ -38,9 +37,6 @@ class GoogleDriveService
         return $copy->id;
     }
 
-    /**
-     * Share a file or folder with a specific email
-     */
     public function share(string $fileId, string $email, string $role = 'reader'): void
     {
         $permission = new Google_Service_Drive_Permission([
@@ -49,21 +45,24 @@ class GoogleDriveService
             'emailAddress' => $email,
         ]);
 
-        // sendNotificationEmail: false prevents spamming the Service Account
         $this->service->permissions->create($fileId, $permission, ['sendNotificationEmail' => false]);
     }
 
     public function revokeAccess(string $fileId, string $email): void
     {
         try {
-            $permissions = $this->service->permissions->listPermissions($fileId);
+            // Request emailAddress field specifically to ensure we can match it
+            $permissions = $this->service->permissions->listPermissions($fileId, [
+                'fields' => 'permissions(id, emailAddress)'
+            ]);
+
             foreach ($permissions as $permission) {
                 if ($permission->emailAddress === $email) {
                     $this->service->permissions->delete($fileId, $permission->id);
                 }
             }
         } catch (\Exception $e) {
-            // Ignore errors if permission is already gone
+            // Permission might already be gone
         }
     }
 
@@ -76,6 +75,7 @@ class GoogleDriveService
             return false;
         }
     }
+
     public function emptyTrash(): void
     {
         $this->service->files->emptyTrash();

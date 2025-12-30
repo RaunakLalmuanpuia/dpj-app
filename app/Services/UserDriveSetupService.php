@@ -39,33 +39,35 @@ class UserDriveSetupService
         $adminDrive = $this->factory->createAdminDriveService();
         $templates = $this->getTemplatesForPlan($plan);
 
-        // 1. User creates the container folder (User Owns Folder)
+        // 1. User creates the container folder
         $folderId = $userDrive->createFolder("DPJ (" . ucfirst($plan) . ") - {$user->name}");
 
-        // 2. Get Service Account Email to grant write access
-        $serviceAccountEmail = $this->factory->getServiceAccountEmail();
-
-        // 3. User grants 'Writer' access to Service Account so it can drop files here
-        $userDrive->share($folderId, $serviceAccountEmail, 'writer');
-
         $createdIds = [];
-        foreach ($templates as $index => $templateId) {
-            // 4. Admin performs the copy (Preserves Scripts)
-            // Note: This consumes SERVICE ACCOUNT Quota, not User Quota
-            try {
-                $createdIds[] = $adminDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
-            } catch (\Exception $e) {
-                // Catch quota errors specifically to give clearer logs
-                Log::error("Drive Copy Failed: " . $e->getMessage());
-                throw $e;
-            }
-        }
 
-        // 5. Cleanup: Revoke Service Account access (Optional, keeping it can help with debugging)
-        try {
-            $userDrive->revokeAccess($folderId, $serviceAccountEmail);
-        } catch (\Exception $e) {
-            Log::warning("Failed to revoke SA access: " . $e->getMessage());
+        foreach ($templates as $index => $templateId) {
+            // STRATEGY: Share -> Copy (as User) -> Revoke
+            // This ensures the USER owns the file and uses USER storage.
+
+            try {
+                // A. Admin grants User read access to the template
+                // (Required so User can see it to copy it)
+                $adminDrive->share($templateId, $user->email, 'reader');
+
+                // B. User performs the copy
+                // Since $userDrive runs this, the User becomes the OWNER.
+                $createdIds[] = $userDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
+
+            } catch (\Exception $e) {
+                Log::error("Drive Share/Copy Failed: " . $e->getMessage());
+                throw $e;
+            } finally {
+                // C. Always revoke access, even if copy failed, to keep templates secure
+                try {
+                    $adminDrive->revokeAccess($templateId, $user->email);
+                } catch (\Exception $e) {
+                    Log::warning("Failed to revoke template access: " . $e->getMessage());
+                }
+            }
         }
 
         UserGoogleDrive::updateOrCreate(
