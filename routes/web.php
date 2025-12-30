@@ -36,10 +36,10 @@ Route::get('/debug/fix-drive-quota', function (GoogleClientFactory $factory) {
     try {
         $adminDrive = $factory->createAdminDriveService();
 
-        // Now calling the public method we just added
+        // CORRECT: Call the public method we added
         $adminDrive->emptyTrash();
 
-        return "Success! Trash has been emptied. You can now try logging in.";
+        return "Success! Trash has been emptied.";
     } catch (\Exception $e) {
         return "Error: " . $e->getMessage();
     }
