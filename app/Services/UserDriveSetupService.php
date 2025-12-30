@@ -30,20 +30,37 @@ class UserDriveSetupService
 
             return $this->setupNewDrive($user, $plan, $userDrive);
         });
-
     }
 
     private function setupNewDrive(User $user, string $plan, $userDrive): string
     {
         $adminDrive = $this->factory->createAdminDriveService();
         $templates = $this->getTemplatesForPlan($plan);
+
+        // 1. User creates the folder (User is Owner)
         $folderId = $userDrive->createFolder("DPJ (" . ucfirst($plan) . ") - {$user->name}");
+
+        // 2. Get Service Account Email
+        $serviceAccountEmail = $this->factory->getServiceAccountEmail();
+
+        // 3. User shares the NEW FOLDER with Service Account (as Writer)
+        // This allows the Service Account to put files into this folder.
+        $userDrive->share($folderId, $serviceAccountEmail, 'writer');
 
         $createdIds = [];
         foreach ($templates as $index => $templateId) {
-            $adminDrive->shareWithReadAccess($templateId, $user->email);
-            $createdIds[] = $userDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
-            $adminDrive->revokeAccess($templateId, $user->email);
+            // 4. Admin (Service Account) performs the copy.
+            // Admin owns the template, and now has write access to the destination folder.
+            $createdIds[] = $adminDrive->copyFile($templateId, "Sheet " . ($index + 1), $folderId);
+        }
+
+        // 5. Cleanup: User revokes Service Account access to the folder
+        try {
+            $userDrive->revokeAccess($folderId, $serviceAccountEmail);
+        } catch (\Exception $e) {
+            // Log this silently; it's not critical if revocation fails,
+            // but prevents the main flow from breaking.
+            \Illuminate\Support\Facades\Log::warning("Failed to revoke SA access: " . $e->getMessage());
         }
 
         UserGoogleDrive::updateOrCreate(

@@ -27,23 +27,28 @@ class GoogleDriveService
 
     public function copyFile(string $fileId, string $newName, string $folderId): string
     {
-        $copy = $this->service->files->copy($fileId, new Google_Service_Drive_DriveFile(['name' => $newName]));
-
-        $this->service->files->update($copy->id, new Google_Service_Drive_DriveFile(), [
-            'addParents' => $folderId,
-            'removeParents' => 'root',
+        // Optimized: Set parent during copy to avoid 'orphan' file issues
+        $fileMetadata = new Google_Service_Drive_DriveFile([
+            'name' => $newName,
+            'parents' => [$folderId]
         ]);
+
+        $copy = $this->service->files->copy($fileId, $fileMetadata);
 
         return $copy->id;
     }
 
-    public function shareWithReadAccess(string $fileId, string $email): void
+    /**
+     * Generic share method for 'reader' or 'writer'
+     */
+    public function share(string $fileId, string $email, string $role = 'reader'): void
     {
         $permission = new Google_Service_Drive_Permission([
             'type' => 'user',
-            'role' => 'reader',
+            'role' => $role,
             'emailAddress' => $email,
         ]);
+
         $this->service->permissions->create($fileId, $permission, ['sendNotificationEmail' => false]);
     }
 
