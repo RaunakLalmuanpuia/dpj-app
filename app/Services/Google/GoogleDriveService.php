@@ -76,4 +76,8 @@ class GoogleDriveService
             return false;
         }
     }
+    public function emptyTrash(): void
+    {
+        $this->service->files->emptyTrash();
+    }
 }
